@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>07.01 - Load JSON Model</title>
-    <script src="../libs/three.js"></script>
-    <script src="../libs/dat.gui.min.js"></script>
-    <script src="../libs/stats.min.js"></script>
-    <script src="../libs/JSONLoader.js"></script>
+    <title>Load JSON Model</title>
+    <script src="libs/three.js"></script>
+    <script src="libs/dat.gui.min.js"></script>
+    <script src="libs/stats.min.js"></script>
+    <script src="libs/JSONLoader.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -84,7 +84,7 @@
 
     function loadModel() {
         var loader = new THREE.JSONLoader();
-        loader.load("../assets/models/exported/betterTerrain.js",
+        loader.load("assets/betterTerrain.js",
         function(model) {
             var material = new THREE.MeshNormalMaterial();
 
