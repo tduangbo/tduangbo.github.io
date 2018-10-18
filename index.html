@@ -6,6 +6,7 @@
     <script src="libs/dat.gui.min.js"></script>
     <script src="libs/stats.min.js"></script>
     <script src="libs/JSONLoader.js"></script>
+    <script src="libs/OrbitControls.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -22,6 +23,7 @@
     var camera;
     var control;
     var stats;
+    var cameraControl;
 
 
     /**
@@ -49,10 +51,12 @@
         plane.receiveShadow = true;
 
         // rotate and position the plane
-        plane.rotation.x = -0.5 * Math.PI;
+       plane.rotation.x = -0.5 * Math.PI;
         plane.position.x = 0;
         plane.position.y = -2;
         plane.position.z = 0;
+        
+        
 
 
         // position and point the camera to the center of the scene
@@ -60,6 +64,9 @@
         camera.position.y = 3;
         camera.position.z = 3;
         camera.lookAt(scene.position);
+        
+        // add camera control
+        cameraControl = new THREE.OrbitControls(camera);
 
 
         // setup the control object for the control gui
@@ -119,14 +126,23 @@
      * for future renders
      */
     function render() {
+        
+        
         // update the camera
         var rotSpeed = control.rotationSpeed;
         camera.position.x = camera.position.x * Math.cos(rotSpeed) + camera.position.z * Math.sin(rotSpeed);
         camera.position.z = camera.position.z * Math.cos(rotSpeed) - camera.position.x * Math.sin(rotSpeed);
         camera.lookAt(scene.position);
+        
+        
+       
+
+
 
         // update stats
         stats.update();
+        //update camera
+        cameraControl.update();
 
         // and render the scene
         renderer.render(scene, camera);
