@@ -114,13 +114,13 @@
 
     function loadModel() {
         var loader = new THREE.JSONLoader();
-        loader.load("assets/terrain.js",
+        loader.load("assets/better.js",
         function(model) {
             
-        var material = new THREE.MeshNormalMaterial();
-            //var material1 = createTerrainMaterial();
+       var material = new THREE.MeshNormalMaterial();
+            var material1 = createTerrainMaterial();
 
-            var mesh = new THREE.Mesh(model, material);
+            var mesh = new THREE.Mesh(model, material1);
             mesh.translateY(0);
             mesh.scale = new THREE.Vector3(0,0,0);
 
