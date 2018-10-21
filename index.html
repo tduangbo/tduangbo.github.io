@@ -68,7 +68,7 @@
         plane.position.z = 0;
         
         
-        scene.add(plane);
+       // scene.add(plane);
         
         
 
@@ -114,15 +114,15 @@
 
     function loadModel() {
         var loader = new THREE.JSONLoader();
-        loader.load("assets/better.js",
+        loader.load("assets/terrain.js",
         function(model) {
             
         var material = new THREE.MeshNormalMaterial();
-            var material1 = createTerrainMaterial();
+            //var material1 = createTerrainMaterial();
 
-            var mesh = new THREE.Mesh(model, material1);
+            var mesh = new THREE.Mesh(model, material);
             mesh.translateY(0);
-            mesh.scale = new THREE.Vector3(9,9,9);
+            mesh.scale = new THREE.Vector3(0,0,0);
 
             scene.add(mesh);
         });
