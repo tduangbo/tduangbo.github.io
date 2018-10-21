@@ -7,6 +7,9 @@
     <script src="libs/stats.min.js"></script>
     <script src="libs/JSONLoader.js"></script>
     <script src="libs/OrbitControls.js"></script>
+    <script src="libs/FlyControls.js"></script>
+    <script src="libs/chroma.js"></script>
+    
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -15,6 +18,10 @@
         }
     </style>
 </head>
+<body>
+    <!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
 <script>
 
     // global variables
@@ -24,6 +31,8 @@
     var control;
     var stats;
     var cameraControl;
+    var flyControl;
+     var clock = new THREE.Clock();
 
 
     /**
@@ -44,8 +53,10 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
 
+    
+        
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(20, 20);
+        var planeGeometry = new THREE.PlaneGeometry(1000, 10000);
         var planeMaterial = new THREE.MeshLambertMaterial({color: 0xcccccc});
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.receiveShadow = true;
@@ -57,16 +68,28 @@
         plane.position.z = 0;
         
         
+        scene.add(plane);
+        
+        
 
 
         // position and point the camera to the center of the scene
-        camera.position.x = 3;
-        camera.position.y = 3;
-        camera.position.z = -15;
-        camera.lookAt(scene.position);
-        
+        camera.position.x = 0;
+        camera.position.y = 10;
+        camera.position.z = 15;
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
         // add camera control
         cameraControl = new THREE.OrbitControls(camera);
+        
+        flyControls = new THREE.FlyControls(camera);
+
+        flyControls.movementSpeed = 25;
+        flyControls.domElement = document.querySelector("#WebGL-output");
+        flyControls.rollSpeed = Math.PI / 24;
+        flyControls.autoForward = false;
+        flyControls.dragToLook = false;
+        
+        
 
 
         // setup the control object for the control gui
@@ -91,16 +114,28 @@
 
     function loadModel() {
         var loader = new THREE.JSONLoader();
-        loader.load("assets/betterTerrain.js",
+        loader.load("assets/willapa.js",
         function(model) {
-            var material = new THREE.MeshNormalMaterial();
+            
+        var material = new THREE.MeshNormalMaterial();
+            var material1 = createTerrainMaterial();
 
-            var mesh = new THREE.Mesh(model, material);
-            mesh.translateY(-0.5);
-            mesh.scale = new THREE.Vector3(3,3,3);
+            var mesh = new THREE.Mesh(model, material1);
+            mesh.translateY(0);
+            mesh.scale = new THREE.Vector3(9,9,9);
 
             scene.add(mesh);
         });
+    }
+    
+    function createTerrainMaterial() {
+        // 4096 is the maximum width for maps
+        var terrainTexture = THREE.ImageUtils.loadTexture("assets/willaWildlifeTerrain.png");
+
+        var terrainMaterial = new THREE.MeshBasicMaterial();
+        terrainMaterial.map = terrainTexture;
+
+        return terrainMaterial;
     }
 
 
@@ -130,9 +165,9 @@
         
         // update the camera
         
-        var rotSpeed = control.rotationSpeed;
-        camera.position.x = camera.position.x * Math.cos(rotSpeed) + camera.position.z * Math.sin(rotSpeed);
-        camera.position.z = camera.position.z * Math.cos(rotSpeed) - camera.position.x * Math.sin(rotSpeed);
+        //var rotSpeed = control.rotationSpeed;
+        //camera.position.x = camera.position.x * Math.cos(rotSpeed) + camera.position.z * Math.sin(rotSpeed);
+        //camera.position.z = camera.position.z * Math.cos(rotSpeed) - camera.position.x * Math.sin(rotSpeed);
         
         camera.lookAt(scene.position);
         
@@ -145,6 +180,9 @@
         stats.update();
         //update camera
         cameraControl.update();
+        
+          //var delta = clock.getDelta();
+        //flyControls.update(delta);
 
         // and render the scene
         renderer.render(scene, camera);
@@ -170,6 +208,7 @@
     window.addEventListener('resize', handleResize, false);
 
 </script>
-<body>
+
+
 </body>
 </html>
