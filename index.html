@@ -1,223 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>three.js webgl - cloth simulation</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				font-family: Monospace;
-				background-color: #000;
-				color: #000;
-				margin: 0px;
-				overflow: hidden;
-			}
+<html>
+<head>
+    <title>Wildlife Refuge Terrain</title>
+    <script src="libs/three.js"></script>
+    <script src="libs/dat.gui.min.js"></script>
+    <script src="libs/stats.min.js"></script>
+    <script src="libs/JSONLoader.js"></script>
+    <script src="libs/OrbitControls.js"></script>
+    <script src="libs/FlyControls.js"></script>
+    <script src="libs/chroma.js"></script>
+    
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+<script>
 
-			#info {
-				position: absolute;
-				padding: 10px;
-				width: 100%;
-				text-align: center;
-			}
-
-			a {
-				text-decoration: underline;
-				cursor: pointer;
-			}
-
-		</style>
-	</head>
-
-	<body>
-		
-
-		<script src="libs/three.js"></script>
-
-		<script src="libs/WebGL.js"></script>
-		<script src="libs/OrbitControls.js"></script>
-		<script src="libs/stats.min.js"></script>
-
-	
-
-		<script>
-
-		
-			if ( WEBGL.isWebGLAvailable() === false ) {
-
-				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
-
-			}
-
-			var container, stats;
-			var camera, scene, renderer;
-
-			var clothGeometry;
-			var sphere;
-			var object;
-
-			init();
-			animate();
-
-			function init() {
-
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
-
-				// scene
-
-				scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0xcce0ff );
-				scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
-
-				// camera
-
-				camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.set( 1000, 50, 1500 );
-
-				// lights
-
-				scene.add( new THREE.AmbientLight( 0x666666 ) );
-
-				var light = new THREE.DirectionalLight( 0xdfebff, 1 );
-				light.position.set( 50, 200, 100 );
-				light.position.multiplyScalar( 1.3 );
-
-				light.castShadow = true;
-
-				light.shadow.mapSize.width = 1024;
-				light.shadow.mapSize.height = 1024;
-
-				var d = 300;
-
-				light.shadow.camera.left = - d;
-				light.shadow.camera.right = d;
-				light.shadow.camera.top = d;
-				light.shadow.camera.bottom = - d;
-
-				light.shadow.camera.far = 1000;
-
-				scene.add( light );
+    // global variables
+    var renderer;
+    var scene;
+    var camera;
+    var control;
+    var stats;
+    var cameraControl;
+    var flyControl;
+     var clock = new THREE.Clock();
 
 
-				var loader = new THREE.TextureLoader();
-			
+    /**
+     * Initializes the scene, camera and objects. Called when the window is
+     * loaded by using window.onload (see below)
+     */
+    function init() {
 
-				// ground
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        scene = new THREE.Scene();
 
-				var groundTexture = loader.load( 'assets/grasslight-big.jpg' );
-				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
-				groundTexture.repeat.set( 25, 25 );
-				groundTexture.anisotropy = 16;
+        // create a camera, which defines where we're looking at.
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-				var groundMaterial = new THREE.MeshLambertMaterial( { map: groundTexture } );
+        // create a render, sets the background color and the size
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 1.0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMapEnabled = true;
 
-				var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 20000, 20000 ), groundMaterial );
-				mesh.position.y = - 250;
-				mesh.rotation.x = - Math.PI / 2;
-				mesh.receiveShadow = true;
-				scene.add( mesh );	
-				
-				
-				var poleGeo = new THREE.BoxBufferGeometry( 5, 375, 5 );
-				var poleMat = new THREE.MeshLambertMaterial();
-				
-				
-							var gg = new THREE.BoxBufferGeometry( 10, 10, 10 );
-				var mesh = new THREE.Mesh( gg, poleMat );
-				mesh.position.y = - 250;
-				mesh.position.x = 125;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				scene.add( mesh );
+    
+        
+        // create the ground plane
+        var planeGeometry = new THREE.PlaneGeometry(1000, 10000);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xcccccc});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
 
-				//var mesh = loadModel();
-				var mesh = new THREE.Mesh( gg, poleMat );
-				mesh.position.y = - 250;
-				mesh.position.x = - 125;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				//scene.add( mesh );
-				
-				loadModel();
+        // rotate and position the plane
+       plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 0;
+        plane.position.y = -2;
+        plane.position.z = 0;
+        
+        
+       // scene.add(plane);
+        
+        
 
 
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
+        // position and point the camera to the center of the scene
+        camera.position.x = 0;
+        camera.position.y = 15;
+        camera.position.z = 1;
+		//camera.position.set( 1000, 50, 1500 );
+        camera.lookAt(new THREE.Vector3(3, 3, 3));
+        // add camera control
+        cameraControl = new THREE.OrbitControls(camera);
+		cameraControl.maxPolarAngle = Math.PI * 0.5;
+        /*
+        flyControls = new THREE.FlyControls(camera);
 
-				container.appendChild( renderer.domElement );
+        flyControls.movementSpeed = 25;
+        flyControls.domElement = document.querySelector("#WebGL-output");
+        flyControls.rollSpeed = Math.PI / 24;
+        flyControls.autoForward = false;
+        flyControls.dragToLook = false;
+        
+        */
 
-				renderer.gammaInput = true;
-				renderer.gammaOutput = true;
 
-				renderer.shadowMap.enabled = true;
-				
-				
+        // setup the control object for the control gui
+        control = new function() {
+            this.rotationSpeed = 0.005;
+        };
 
-				// controls
-				//var controls = new THREE.OrbitControls( camera, renderer.domElement );
-				var controls = new THREE.OrbitControls( camera, renderer.domElement );
-				controls.maxPolarAngle = Math.PI * 0.5;
-				controls.minDistance = 1000;
-				controls.maxDistance = 5000;
+        // add extras
+        addControlGui(control);
+        addStatsObject();
 
-				// performance monitor
+        loadModel();
 
-				stats = new Stats();
-				container.appendChild( stats.dom );			//
 
-				window.addEventListener( 'resize', onWindowResize, false );				
+        // add the output of the renderer to the html element
+        document.body.appendChild(renderer.domElement);
 
-			}
+        // call the render function, after the first render, interval is determined
+        // by requestAnimationFrame
+        render();
+    }
 
-			//
-
-			function onWindowResize() {
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-			}
-			
-	 function loadModel() {
+    function loadModel() {
         var loader = new THREE.JSONLoader();
-        loader.load("assets/rabbit.js",
+        loader.load("assets/willapa.js",
         function(model) {
             
        var material = new THREE.MeshNormalMaterial();
-           
+            var material1 = createTerrainMaterial();
 
             var mesh = new THREE.Mesh(model, material);
-				mesh.position.y = - 250;
-				mesh.position.x = - 125;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				scene.add( mesh );
+            mesh.translateY(-2);
+            mesh.scale = new THREE.Vector3(3,3,3);
+
+            scene.add(mesh);
         });
     }
+    
+    function createTerrainMaterial() {
+        // 4096 is the maximum width for maps
+        var terrainTexture = THREE.ImageUtils.loadTexture("assets/willaWildlifeTerrain.png");
 
-			//
+        var terrainMaterial = new THREE.MeshBasicMaterial();
+        terrainMaterial.map = terrainTexture;
 
-			function animate() {
+        return terrainMaterial;
+    }
 
-				requestAnimationFrame( animate );			
 
-				//simulate( time );
-				render();
-				stats.update();
+    function addControlGui(controlObject) {
+        var gui = new dat.GUI();
+        gui.add(controlObject, 'rotationSpeed', -0.01, 0.01);
+    }
 
-			}
+    function addStatsObject() {
+        stats = new Stats();
+        stats.setMode(0);
 
-			function render() {
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
 
-		
+        document.body.appendChild( stats.domElement );
+    }
 
-				renderer.render( scene, camera );
 
-			}
+    /**
+     * Called when the scene needs to be rendered. Delegates to requestAnimationFrame
+     * for future renders
+     */
+    function render() {
+        
+        
+        // update the camera
+        
+        //var rotSpeed = control.rotationSpeed;
+        //camera.position.x = camera.position.x * Math.cos(rotSpeed) + camera.position.z * Math.sin(rotSpeed);
+        //camera.position.z = camera.position.z * Math.cos(rotSpeed) - camera.position.x * Math.sin(rotSpeed);
+        
+        camera.lookAt(scene.position);
+        
+        
+       
 
-		</script>
-	</body>
+
+
+        // update stats
+        stats.update();
+        //update camera
+        cameraControl.update();
+        
+          //var delta = clock.getDelta();
+        //flyControls.update(delta);
+
+        // and render the scene
+        renderer.render(scene, camera);
+
+        // render using requestAnimationFrame
+        requestAnimationFrame(render);
+    }
+
+
+    /**
+     * Function handles the resize event. This make sure the camera and the renderer
+     * are updated at the correct moment.
+     */
+    function handleResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    // calls the init function when the window is done loading.
+    window.onload = init;
+    // calls the handleResize function when the window is resized
+    window.addEventListener('resize', handleResize, false);
+
+</script>
+
+
+</body>
 </html>
