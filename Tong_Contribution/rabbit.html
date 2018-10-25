@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - cloth simulation</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				padding: 10px;
+				width: 100%;
+				text-align: center;
+			}
+
+			a {
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		
+
+		<script src="libs/three.js"></script>
+
+		<script src="libs/WebGL.js"></script>
+		<script src="libs/OrbitControls.js"></script>
+		<script src="libs/stats.min.js"></script>
+
+	
+
+		<script>
+
+		
+			if ( WEBGL.isWebGLAvailable() === false ) {
+
+				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+
+			}
+
+			var container, stats;
+			var camera, scene, renderer;
+
+			var clothGeometry;
+			var sphere;
+			var object;
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				// scene
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0xcce0ff );
+				scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
+
+				// camera
+
+				camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.set( 1000, 50, 1500 );
+
+				// lights
+
+				scene.add( new THREE.AmbientLight( 0x666666 ) );
+
+				var light = new THREE.DirectionalLight( 0xdfebff, 1 );
+				light.position.set( 50, 200, 100 );
+				light.position.multiplyScalar( 1.3 );
+
+				light.castShadow = true;
+
+				light.shadow.mapSize.width = 1024;
+				light.shadow.mapSize.height = 1024;
+
+				var d = 300;
+
+				light.shadow.camera.left = - d;
+				light.shadow.camera.right = d;
+				light.shadow.camera.top = d;
+				light.shadow.camera.bottom = - d;
+
+				light.shadow.camera.far = 1000;
+
+				scene.add( light );
+
+
+				var loader = new THREE.TextureLoader();
+			
+
+				// ground
+
+				var groundTexture = loader.load( 'assets/grasslight-big.jpg' );
+				groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+				groundTexture.repeat.set( 25, 25 );
+				groundTexture.anisotropy = 16;
+
+				var groundMaterial = new THREE.MeshLambertMaterial( { map: groundTexture } );
+
+				var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 20000, 20000 ), groundMaterial );
+				mesh.position.y = - 250;
+				mesh.rotation.x = - Math.PI / 2;
+				mesh.receiveShadow = true;
+				scene.add( mesh );	
+				
+				
+				var poleGeo = new THREE.BoxBufferGeometry( 5, 375, 5 );
+				var poleMat = new THREE.MeshLambertMaterial();
+				
+				
+							var gg = new THREE.BoxBufferGeometry( 10, 10, 10 );
+				var mesh = new THREE.Mesh( gg, poleMat );
+				mesh.position.y = - 250;
+				mesh.position.x = 125;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				scene.add( mesh );
+
+				//var mesh = loadModel();
+				var mesh = new THREE.Mesh( gg, poleMat );
+				mesh.position.y = - 250;
+				mesh.position.x = - 125;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				//scene.add( mesh );
+				
+				loadModel();
+
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				container.appendChild( renderer.domElement );
+
+				renderer.gammaInput = true;
+				renderer.gammaOutput = true;
+
+				renderer.shadowMap.enabled = true;
+				
+				
+
+				// controls
+				//var controls = new THREE.OrbitControls( camera, renderer.domElement );
+				var controls = new THREE.OrbitControls( camera, renderer.domElement );
+				controls.maxPolarAngle = Math.PI * 0.5;
+				controls.minDistance = 1000;
+				controls.maxDistance = 5000;
+
+				// performance monitor
+
+				stats = new Stats();
+				container.appendChild( stats.dom );			//
+
+				window.addEventListener( 'resize', onWindowResize, false );				
+
+			}
+
+			//
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+			
+	 function loadModel() {
+        var loader = new THREE.JSONLoader();
+        loader.load("assets/rabbit.js",
+        function(model) {
+            
+       var material = new THREE.MeshNormalMaterial();
+           
+
+            var mesh = new THREE.Mesh(model, material);
+				mesh.position.y = - 250;
+				mesh.position.x = - 125;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				scene.add( mesh );
+        });
+    }
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );			
+
+				//simulate( time );
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+		
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+	</body>
+</html>
