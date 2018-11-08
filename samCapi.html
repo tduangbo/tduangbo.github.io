@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		
+	body{
+		width: 50%
+		length: 50%
+	}
+	
+	</style>
+	
+
+	
+</head>
+<body>
+
+<h1>Show checkboxes:</h1>
+
+<form action="/action_page.php">
+  <input type="checkbox" name="vehicle1" value="Bike"> I have a bike<br>
+  <input type="checkbox" name="vehicle2" value="Car"> I have a car<br>
+  <input type="checkbox" name="vehicle3" value="Boat" checked> I have a boat<br><br>
+  <input type="submit" value="Submit">
+</form>
+	
+	<p id="demo"></p>
+	
+	
+	
+<script src='https://lib.smartsparrow.com/simcapi-js-3.1.0.min.js'></script>
+<script>
+	// Setup Data
+var simModel = new simcapi.CapiAdapter.CapiModel({
+    demoMode: 7,
+    studentResponse: '5',
+    simEnabled: true
+});
+
+
+
+simcapi.CapiAdapter.expose('demoMode', simModel,
+                                     {readonly: false});
+simcapi.CapiAdapter.expose('studentResponse', simModel,
+                                            {alias: 'studentAnswer',
+                                           readonly: true});
+simcapi.CapiAdapter.expose('simEnabled', simModel,
+                                       {writeonly: true});
+
+
+
+simcapi.Transporter.notifyOnReady();
+	
+	var value = simModel.get('demoMode');
+	
+	document.getElementById("demo").innerHTML =
+"The value of z is: " + value;
+	
+	
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<style>
+			html, body {
+				background-color: #000;
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color: #ffffff;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div id="container"></div>
+		<div id="info">
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js webgl</a> - cube panorama demo.
+		</div>
+
+		<script src="libs/three.js"></script>
+		
+		
+		<script src="libs/OrbitControls.js"></script>
+
+		<script>
+
+		var camera, controls;
+		var renderer;
+		var scene;
+
+		init();
+	
+
+		function init() {
+
+			var container = document.getElementById( 'container' );
+
+			renderer = new THREE.WebGLRenderer();
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			container.appendChild( renderer.domElement );
+
+			scene = new THREE.Scene();
+
+			camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 100 );
+			camera.position.z = 0.01;
+
+			controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.enableZoom = false;
+			controls.enablePan = false;
+			controls.enableDamping = true;
+			controls.rotateSpeed = - 0.25;
+
+		}
+			
+	  			function loadTexture( path ) {
+
+				var texture = new THREE.Texture( texture_placeholder );
+				var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
+
+				var image = new Image();
+				image.onload = function () {
+
+					texture.image = this;
+					texture.needsUpdate = true;
+
+				};
+				image.src = path;
+
+				return material;
+
+			}
+			var geometry = new THREE.CubeGeometry(10000, 10000, 10000);
+		
+				var materials = [
+
+					loadTexture( 'textures/cube/skybox/px.jpg' ), // right
+					loadTexture( 'textures/cube/skybox/nx.jpg' ), // left
+					loadTexture( 'textures/cube/skybox/py.jpg' ), // top
+					loadTexture( 'textures/cube/skybox/ny.jpg' ), // bottom
+					loadTexture( 'textures/cube/skybox/pz.jpg' ), // back
+					loadTexture( 'textures/cube/skybox/nz.jpg' )  // front
+
+				];
+
+			//var cubeMaterial = new THREE.MeshFaceMaterial(cubeMaterials);
+			var cube = new THREE.Mesh(geometry, cubeMaterials);
+			scene.add(cube);
+			
+			var ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.3);
+			
+			scene.add(ambientLight);
+			
+			
+			
+			function onWindowResize() {
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+		}
+
+			
+			// 
+			var update = function(){
+				
+				//cube.rotation.x += 0.01;
+				// cube.rotation.y += 0.01;
+				
+			}
+			
+			// draw Scene
+			var render = function(){
+				renderer.render(scene, camera);
+			}
+			
+			//
+			
+			var Loop = function(){
+				requestAnimationFrame(Loop);
+				update();
+				render();
+			}
+			
+			Loop();
+			
+			
+			
+			
+			
+			
+			
+
+	
+		</script>
+	</body>
+</html>
