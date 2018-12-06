@@ -45,7 +45,7 @@
         renderer.shadowMapEnabled = true;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(20, 20);
+        var planeGeometry = new THREE.PlaneGeometry(10, 10);
         var planeMaterial = new THREE.MeshLambertMaterial({color: 0xcccccc});
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.receiveShadow = true;
@@ -55,8 +55,8 @@
 
         // position and point the camera to the center of the scene
         camera.position.x = 3;
-        camera.position.y = 15;
-        camera.position.z = 10;
+        camera.position.y = 50;
+        camera.position.z = 20;
         camera.lookAt(scene.position);
 		
 		  // add camera control

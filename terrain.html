@@ -114,31 +114,20 @@
         render();
     }
 
+
+
     function loadModel() {
         var loader = new THREE.JSONLoader();
-        loader.load("assets/willapa.js",
-        function(model) {
-            
-       var material = new THREE.MeshNormalMaterial();
-            var material1 = createTerrainMaterial();
+            loader.load("assets/betterTerrain.js",
+        function(model, material) {
 
-            var mesh = new THREE.Mesh(model, material);
-            mesh.translateY(-2);
+            var mesh = new THREE.Mesh(model, material[0]);
             mesh.scale = new THREE.Vector3(3,3,3);
-
             scene.add(mesh);
-        });
-    }
-    
-    function createTerrainMaterial() {
-        // 4096 is the maximum width for maps
-        var terrainTexture = THREE.ImageUtils.loadTexture("assets/willaWildlifeTerrain.png");
 
-        var terrainMaterial = new THREE.MeshBasicMaterial();
-        terrainMaterial.map = terrainTexture;
-
-        return terrainMaterial;
+        }, "assets/");
     }
+
 
 
     function addControlGui(controlObject) {
