@@ -1,0 +1,405 @@
+body { 
+	background-color: #074600;
+	background-image: linear-gradient(to bottom, #92D18B,  #074600  );
+	background-repeat: no-repeat;
+    color: #666666; 
+	font-family: Arial, Helvetica, sans-serif;
+	   
+}
+#wrapper{
+	
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #5FAE57;
+	width: 80%;
+	min-width: 960px;
+	max-width: 2048px;
+	box-shadow: 3px 3px 3px #333333;
+	
+	
+	
+	
+}
+
+header{
+    background-color: #074600;
+        color: #FFFFFF;
+	background-image: none;
+	background-position: right;
+	background-repeat: no-repeat;
+	height: 60px;
+	text-align: center;
+	padding-top: 15px;
+	
+}
+
+nav { float: left;
+	  width: 190px;
+	  letter-spacing:0.1em;
+	  font-weight: bold;
+} 
+
+nav ul { list-style-type: none; 
+         margin: 0;
+         padding: 0;
+}
+nav li { border-bottom: 1px solid #ffffff;
+}
+nav a { text-decoration: none; 
+        display: block;
+		padding: 15px;
+		transition: background-color 2s linear;
+}
+#lession{
+	margin-top: 50px;
+	margin-left: 0;
+	margin-bottom: auto;
+	display: block;
+	overflow: auto;
+	background-color: #B9E397;
+}
+main{
+	background-color: #FFFFFF;
+	margin-left: 190px;
+	padding-top: 1px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 30px;
+	
+	overflow: auto;
+}
+
+main ul{
+	list-style-image: url(marker.gif);
+	
+}
+
+h1{
+	margin-top: 0;
+    margin-bottom: 0;
+	font-family: Geogia, "Times New Roman", serif;
+	
+}
+h2{
+    color: #3399CC;
+	font-family: Geogia, "Times New Roman", serif;
+	text-shadow: 1px 1px 1px #CCCCCC;
+}
+
+h3{
+	color: #000033;
+	font-family: Geogia, "Times New Roman", serif;
+}
+h4{
+	color: #000033;
+	font-family: Geogia, "Times New Roman", serif;
+}
+image{
+	margin-left: 0;
+}
+
+
+
+footer{
+	background-color: #FFFFFF;
+	margin-left: 190px;
+	font-size: 70%;
+	font-style: italic;
+	text-align: center;
+	font-family: Geogia, "Times New Roman", serif;
+	padding: 20px;
+	
+	
+}
+
+dt{
+    color: #000033;
+}
+
+.goal{
+    color: #5C7FA3;
+	font-weight: bold;
+}
+
+#contact{
+	font-size: 90%;
+	float: left;
+	
+}
+#homehero{
+	margin-left: 190px;
+	height: 300px;
+	background-image: url(laoSchool.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+#mathhero{
+	margin-left: 190px;
+	height: 200px;
+	background-image: url(mathematic.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	
+}
+#computinghero{
+	margin-left: 190px;
+	height: 300px;
+	background-image: url(Computing.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	
+}
+#englishhero{
+	margin-left: 190px;
+	height: 300px;
+	background-image: url(english.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	
+}
+#chemistryhero{
+	margin-left: 190px;
+	height: 300px;
+	background-image: url(chemistry.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	
+}
+#biologyhero{
+	margin-left: 190px;
+	height: 300px;
+	background-image: url(Biology.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	
+}
+#financehero{
+	margin-left: 190px;
+	height: 300px;
+	background-image: url(finance.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	
+}
+
+a:link {
+    color: #000033;
+}
+
+a:visited {
+    color: #344873;
+}
+
+a:hover {
+    color: #FFFFFF;
+}
+
+header, main, nav, footer, figure, figcaption, aside, section, article { display: block; }
+
+#mobile{
+	display:  none;
+	
+}
+#desktop{
+	display: inline;
+	
+}
+@media only Screen and (max-width: 64em){
+	
+	body{
+		margin: 0;
+		background-color: #FFFFFF;
+	}
+	
+	#wrapper {
+		min-width: 0;
+		width: auto;
+		box-shadow: none;
+	}
+	main{
+		margin-left: 0;
+	}
+	
+	nav{
+		float: none;
+		width: auto;
+		text-align: center;
+		padding: .05em;
+	}
+	nav ul li{
+		
+		display: inline;
+		padding-top: 0.25em;
+		padding-bottom: 0.25em;
+		padding-right: 0.75em;
+		padding-left: 0.75em;
+		
+	}
+	#homehero{
+		margin-left: 0;
+		height: 200px;
+	}
+	
+	#mathhero{
+		margin-left: 0;
+		height: 200px;
+	}
+	#trailhero{
+		margin-left: 0;
+		height: 200px;
+	}
+	footer{
+	margin-left: 0;
+	}
+}
+
+#content{
+	margin-left: 50px;
+}
+	
+	@media only screen and (max-width: 37.5em){
+		header{
+			padding: 1em;
+		}
+		
+		main{
+			padding-top: 0.1em;
+			padding-bottom: 0.1em;
+			padding-right: 1em;
+			padding-left: 1em;
+			font-size:  90%;
+			
+		}
+		
+		h1{
+			font-size: 1.5em;
+						
+		}
+		
+		nav{
+			padding: 0;
+		}
+		
+		nav ul li{
+			display: block;
+			margin: 0;
+			border-bottom: 2px solid #330000;
+		}
+		
+		nav ul li a{
+			display: block;
+		}
+		#homehero{
+			display: none;
+			background-image: none;
+			height: 0;
+		}
+		#yurthero{
+			display: none;
+			background-image: none;
+			height: 0;
+			
+		}
+		#trailhero{
+			display: none;
+			background-image: none;
+			height: 0;
+		}
+		#mobile{
+			display: inline;
+		}
+		#desktop{
+			display: none;
+		}
+		#button{
+		display: block;
+		margin-left: 0;
+			
+		}
+		
+	}
+#contentLesson{
+	margin-left: 30px;
+}
+image{
+	margin-left: 20%
+}
+	
+
+label{
+	
+	float: left;
+	display: block;
+	text-align: right;
+	width: 120px;
+	padding-right: 5px;
+	
+}
+
+input, textarea{
+	
+	display: block;
+	margin-bottom: 20px;
+}
+
+#button{
+	
+	margin-left: 130px;
+	
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
