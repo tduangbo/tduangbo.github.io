@@ -239,6 +239,12 @@ header, main, nav, footer, figure, figcaption, aside, section, article { display
 		margin-left: 0;
 		height: 200px;
 	}
+	#englishhero{
+		margin-left:0px;
+		height: 300px;
+		width: 100%;
+		
+	}
 	
 	#mathhero{
 		margin-left: 0;
